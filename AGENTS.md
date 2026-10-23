@@ -35,3 +35,11 @@ The approved target is DSM 7.4. DSM 7.3 compatibility is a later, unverified con
 - Link claims to primary sources where possible. Preserve research dates and phrase past observations as observations, not current guarantees.
 - Exercise behavior on a disposable NAS: authentication and expiry, DSM ACL allow/deny cases, malformed files and hostile tags, path and symlink races, resource limits and cancellation, MediaInfo absence/upgrade, package install/upgrade/uninstall, and File Station enable/disable where applicable.
 - Report incomplete validation plainly. Do not add proprietary Synology code, downloaded package contents, credentials, media samples, or session material to this repository.
+
+## Git workflow
+
+- `main` is the only long-lived branch. Do not develop directly on it.
+- Start work from an up-to-date `main` and create a short-lived `feature/`, `fix/`, `chore/`, `refactor/`, or `docs/` branch.
+- Push the branch and open a pull request targeting `main`. Ensure CI is current and all conversations are resolved before merge.
+- Use squash merge and delete the branch afterward.
+- Commits on non-`main` branches must be verified signed. The resulting squash commit on `main` is not required to be signed.
