@@ -12,6 +12,8 @@ Establish whether a DSM 7.4 package can securely analyze one user-authorized med
 
 ## Work
 
+The actionable backlog, dependencies, and evidence requirements are in the [Phase 1 tickets](01-tickets.md).
+
 ### 1. Establish the package request runtime
 
 Inventory the built-in PHP executable, version, SAPI, enabled extensions, package-account access, and a package-owned authenticated request route. Validate that identity is derived from the DSM request environment and that session expiry, logout, CSRF, origin checks, and proxy HTTPS behavior work.
