@@ -10,4 +10,6 @@ This roadmap turns the feasibility work into a package in three stages. The targ
 
 Phase 2 does not depend on Phase 3. A Properties-window tab is outside this roadmap because no supported or observed extension point has been found.
 
+The [Phase 1 ticket backlog](01-tickets.md) breaks the proof of concept into ordered investigations with acceptance criteria and required evidence.
+
 Supporting evidence is in the [feasibility report](../feasibility.md) and [existing-package investigation](../package-integration-research.md).
