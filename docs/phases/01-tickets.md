@@ -35,7 +35,7 @@ For API, runtime, or tooling documentation, consult Context7 first. If authorita
 - [x] Record the prototype package version/revision and package-account identity, or explicitly mark them pending until the prototype exists and update them before interpreting its results.
 - [x] Prepare at least two DSM users with contrasting read permissions, including explicit ACL deny cases, and record the intended allow/deny matrix.
 - [x] Prepare short MKV and MP4 videos with identifiable video and audio codecs, plus malformed input, hostile metadata, and access-denied paths; record track details, sizes, checksums, and reproducible fixture descriptions.
-- [ ] Record safe reset and cleanup steps for test package registrations, files, and accounts on the disposable target.
+- [x] Record safe reset and cleanup steps for test package registrations, files, and accounts on the disposable target.
 
 **Required evidence:** Dated environment inventory, fixture descriptions, ACL matrix, and reset procedure. The [P1-001 runbook](../testing/p1-001-runbook.md) and [dated evidence](../testing/p1-001-evidence-2026-10-26.md) track this work. Later tickets reference the inventory and record any version changes.
 

@@ -12,9 +12,9 @@ This procedure is for the disposable `DSM-7.4-Test` libvirt domain. It uses a DS
 
 ## 2. Check the provisional reset point
 
-The existing 23 October host backup contains `domain.xml`, `arc.img`, and `DSM-7.4-Test.qcow2`; the running guest has changed since that copy. Before relying on it, inspect file presence/size, `qemu-img info` for both disks, the qcow2 backing chain, and `qemu-img check` on the backup image with sufficient host privileges. Record command exit codes and observations. These checks do not prove the backup is restorable. Keep the old backup intact; any new cold backup must use a dated destination, a fully shut-down VM, and both disks from the same point in time. For an isolated restore, use new disk paths, domain identity, and network settings; boot the copy before treating it as a reset point.
+The existing 23 October host backup contains `domain.xml`, `arc.img`, and `DSM-7.4-Test.qcow2`; the running guest has changed since that copy. Before relying on it, inspect file presence/size, `qemu-img info` for both disks, the qcow2 backing chain, and `qemu-img check` on the backup image with sufficient host privileges. Record command exit codes and observations. Keep the old backup intact; any new cold backup must use a dated destination, a fully shut-down VM, and both disks from the same point in time. For an isolated restore, use new disk paths, domain identity, and network settings; boot the copy before treating it as a reset point. On 26 October 2026, this procedure was exercised successfully for the existing backup; see the dated evidence for its scope and limitations.
 
-Until a separate restore boots and its data is checked, treat the old backup as a provisional recovery aid. Reset ordinary tests by removing only the named test resources below.
+Reset ordinary tests by removing only the named test resources below. A successful copied-backup boot proves that recovery point only; it does not replace the need for a new cold backup after material VM changes.
 
 ## 3. Create the ACL test area
 
