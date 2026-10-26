@@ -6,9 +6,9 @@ Establish whether a DSM 7.4 package can securely analyze one user-authorized med
 
 ## Prerequisites
 
-- A disposable DSM 7.4 NAS with recorded model, CPU architecture, DSM build, File Station version, and test accounts with contrasting ACLs.
+- A disposable DSM 7.4 target with recorded model, CPU architecture, DSM build, File Station version, and test accounts with contrasting ACLs. The current target is an Arc Loader VM; conclusions must state that scope.
 - SynoCommunity MediaInfo installed from a recorded version and architecture build.
-- Test media that includes a normal file, malformed input, large MKV/MP4, hostile metadata, and access-denied paths.
+- Test media that includes short MKV and MP4 videos with identifiable codecs and tracks, malformed input, hostile metadata, and access-denied paths.
 
 ## Work
 
@@ -26,7 +26,7 @@ Expose one authenticated operation that accepts a validated share-relative selec
 
 Use `/var/packages/mediainfo/target/bin/mediainfo` with fixed arguments including `--Output=JSON`, an argument array, and a minimal child environment. Reject directories, devices, FIFOs, remote/cloud mounts, URL input, playlist/reference input, and unsafe symlink behavior. Bound file size, runtime, CPU, memory, output, jobs, temporary space, and cancellation.
 
-Preferred evidence is secure access to the original authorized file. A full private temporary copy may be used only to diagnose routing and MediaInfo behavior; measure its space and I/O cost and do not present it as the production solution for large video files.
+Preferred evidence is secure access to the original authorized file. A full private temporary copy may be used only to diagnose routing and MediaInfo behavior; measure its space and I/O cost. Short-clip measurements do not establish large-media performance.
 
 ### 3. Test File Station compatibility separately
 

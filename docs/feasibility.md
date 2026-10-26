@@ -1,6 +1,6 @@
 # MediaInfo integration feasibility
 
-Research date: 2026-10-23. Target: DSM 7.4. Status: investigation only. The approved delivery scope is in the [three-phase roadmap](phases/README.md).
+Research date: 2026-10-23. Target: DSM 7.4. Status: investigation only. The approved delivery scope is in the [three-phase roadmap](phases/README.md). Phase 1 fixture and performance scope was updated on 2026-10-26 to use short MKV/MP4 clips.
 
 **Follow-up finding:** inspecting existing packages revealed an undocumented `fb_extern` registration in official legacy Text Editor and PDF Viewer SPKs. See [the package investigation](package-integration-research.md) for primary artifact evidence and limitations. This supplies a concrete package-only candidate for testing; obtaining Synology confirmation is optional and is no longer a prerequisite for further investigation.
 
@@ -151,7 +151,7 @@ For either variant, initially exclude remote/cloud mounts, directories, devices,
 | **Authentication/routing** | Working package gateway, session verification, CSRF protection, logout/expiry behavior, and HTTPS/reverse proxy behavior |
 | **User file access** | Reliable user-session download, or a verified direct-open design preserving effective permissions |
 | **MediaInfo runtime** | Dependency install, executable/library compatibility under the new package account, representative JSON output, parser containment, and update policy |
-| **Usability/performance** | Latency and temporary-space measurements for large MKV/MP4 files; cancellation and resource ceilings |
+| **Usability/performance** | Latency and temporary-space measurements for representative short MKV/MP4 clips; cancellation and resource ceilings. Large-media performance remains unmeasured in Phase 1. |
 | **Packaging lifecycle** | Clean install, upgrade, restart, dependency absence/update/removal handling, and uninstall without DSM edits or retained media copies |
 
 Useful negative cases for a later prototype are two users with different ACLs, explicit deny entries, expired sessions, tampered paths, symlink replacement, malicious tags, malformed media, disk exhaustion, and concurrent requests. These are proposed acceptance checks; none have been run.
