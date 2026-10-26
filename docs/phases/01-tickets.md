@@ -1,6 +1,6 @@
 # Phase 1 tickets — Proof of concept
 
-These tickets implement the [Phase 1 roadmap](01-proof-of-concept.md). P1-001 is in progress on the disposable `DSM-7.4-Test` VM; later tickets remain **Planned**. Results are scoped to that Arc Loader VM, not physical Synology hardware. DSM 7.4 is the target. DSM 7.3 compatibility and the usable standalone product belong to later work.
+These tickets implement the [Phase 1 roadmap](01-proof-of-concept.md). P1-001 is complete on the disposable `DSM-7.4-Test` VM; later tickets remain **Planned**. Results are scoped to that Arc Loader VM, not physical Synology hardware. DSM 7.4 is the target. DSM 7.3 compatibility and the usable standalone product belong to later work.
 
 ## Execution and evidence
 
@@ -12,7 +12,7 @@ For API, runtime, or tooling documentation, consult Context7 first. If authorita
 
 | Ticket | Outcome | Dependencies | Status |
 | --- | --- | --- | --- |
-| [P1-001](#p1-001--establish-the-disposable-test-environment) | Environment inventory and reproducible fixtures | — | In progress |
+| [P1-001](#p1-001--establish-the-disposable-test-environment) | Environment inventory and reproducible fixtures | — | Complete |
 | [P1-002](#p1-002--select-and-prove-the-package-request-runtime) | PHP assessment and runtime decision | P1-001 | Planned |
 | [P1-003](#p1-003--prove-authenticated-package-routing) | Authenticated and protected request route | P1-002 | Planned |
 | [P1-004](#p1-004--prove-user-authorization-for-the-exact-opened-file) | Effective user authorization and safe file access | P1-003 | Planned |
@@ -31,7 +31,7 @@ For API, runtime, or tooling documentation, consult Context7 first. If authorita
 
 **Acceptance criteria:**
 
-- [ ] Record presented NAS model, guest CPU model and package architecture, exact DSM build, File Station version, MediaInfo package version and architecture build, and MediaInfo executable version. Record VM and loader details so results remain version-scoped.
+- [x] Record presented NAS model, guest CPU model and package architecture, exact DSM build, File Station version, MediaInfo package version and architecture build, and MediaInfo executable version. Record VM and loader details so results remain version-scoped.
 - [x] Record the prototype package version/revision and package-account identity, or explicitly mark them pending until the prototype exists and update them before interpreting its results.
 - [x] Prepare at least two DSM users with contrasting read permissions, including explicit ACL deny cases, and record the intended allow/deny matrix.
 - [x] Prepare short MKV and MP4 videos with identifiable video and audio codecs, plus malformed input, hostile metadata, and access-denied paths; record track details, sizes, checksums, and reproducible fixture descriptions.
