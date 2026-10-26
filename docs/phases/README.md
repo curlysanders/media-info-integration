@@ -4,7 +4,7 @@ This roadmap turns the feasibility work into a package in three stages. The targ
 
 | Phase | Outcome | Status |
 | --- | --- | --- |
-| [1. Proof of concept](01-proof-of-concept.md) | Evidence for a safe request runtime, per-user file authorization, MediaInfo analysis, and the `fb_extern` compatibility route | In progress (P1-001) |
+| [1. Proof of concept](01-proof-of-concept.md) | Evidence for a safe request runtime, per-user file authorization, MediaInfo analysis, and the `fb_extern` compatibility route | In progress (P1-002–P1-008; P1-001 complete) |
 | [2. Standalone package](02-standalone-package.md) | A usable open-source SPK with its own DSM window and file selection | Planned |
 | [3. File Station integration](03-file-station-integration.md) | Optional experimental “View MediaInfo” menu action, if Phase 1 validates it | Conditional |
 
