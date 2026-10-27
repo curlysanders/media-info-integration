@@ -21,7 +21,7 @@ docker run --rm \
 cp "$ROOT/package/INFO" "$STAGE/INFO"
 cp -R "$ROOT/package/conf" "$STAGE/conf"
 cp -R "$ROOT/package/nginx/." "$STAGE/package/nginx/"
-cp "$ROOT/package/conf/systemd/pkguser-runtime-probe.service" "$STAGE/conf/systemd/pkguser-runtime-probe.service"
+cp "$ROOT/package/conf/systemd/pkguser-runtime-probe" "$STAGE/conf/systemd/pkguser-runtime-probe"
 cp "$ROOT/package/scripts/start-stop-status" "$STAGE/scripts/start-stop-status"
 chmod 0755 "$STAGE/scripts/start-stop-status" "$STAGE/package/bin/runtime-probe"
 (cd "$STAGE/package" && tar -czf ../package.tgz bin nginx)
