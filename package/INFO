@@ -1,5 +1,5 @@
 package="mediainfo-poc"
-version="0.1.0-0011"
+version="0.1.0-0012"
 displayname="MediaInfo Identity Hand-off Proof"
 description="Disposable Phase 1 custom-CGI identity hand-off probe."
 maintainer="MediaInfo project"

@@ -22,7 +22,7 @@ const (
 var authenticationEnvironmentNames = map[string]struct{}{
 	"GATEWAY_INTERFACE": {}, "HTTPS": {}, "HTTP_COOKIE": {}, "HTTP_HOST": {}, "PATH_INFO": {},
 	"QUERY_STRING": {}, "REMOTE_ADDR": {}, "REQUEST_METHOD": {}, "REQUEST_URI": {}, "SCRIPT_NAME": {},
-	"SERVER_ADDR": {}, "SERVER_NAME": {}, "SERVER_PORT": {}, "SERVER_PROTOCOL": {},
+	"SERVER_ADDR": {}, "SERVER_NAME": {}, "SERVER_PORT": {}, "SERVER_PROTOCOL": {}, "HTTP_X_SYNO_TOKEN": {},
 }
 
 type authenticator interface {

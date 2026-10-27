@@ -52,9 +52,9 @@ func TestProbeResponseRejectsUnsupportedMethods(t *testing.T) {
 func TestAuthenticationEnvironmentKeepsOnlyDocumentedCGIContext(t *testing.T) {
 	filtered := strings.Join(authenticationEnvironment([]string{
 		"REQUEST_METHOD=GET", "HTTP_COOKIE=session-value", "REMOTE_ADDR=192.0.2.1", "SERVER_ADDR=192.0.2.2",
-		"HTTP_X_FORWARDED_USER=forged", "AWS_SECRET_ACCESS_KEY=not-for-helper",
+		"HTTP_X_SYNO_TOKEN=dsm-csrf-token", "HTTP_X_FORWARDED_USER=forged", "AWS_SECRET_ACCESS_KEY=not-for-helper",
 	}), "\n")
-	for _, expected := range []string{"PATH=/usr/bin:/bin", "REQUEST_METHOD=GET", "HTTP_COOKIE=session-value", "REMOTE_ADDR=192.0.2.1", "SERVER_ADDR=192.0.2.2"} {
+	for _, expected := range []string{"PATH=/usr/bin:/bin", "REQUEST_METHOD=GET", "HTTP_COOKIE=session-value", "REMOTE_ADDR=192.0.2.1", "SERVER_ADDR=192.0.2.2", "HTTP_X_SYNO_TOKEN=dsm-csrf-token"} {
 		if !strings.Contains(filtered, expected) {
 			t.Fatalf("environment missing %q: %s", expected, filtered)
 		}

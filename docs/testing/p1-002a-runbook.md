@@ -21,7 +21,7 @@ Context7 was consulted first on 27 October 2026. Its available Synology DSM entr
 https://<nas>:5001/webman/3rdparty/mediainfo-poc/runtime.cgi
 ```
 
-The CGI invokes `/usr/syno/synoman/webman/modules/authenticate.cgi` directly, with only bounded CGI values (`HTTP_COOKIE`, remote/server address, request method and URI, protocol, host, and related CGI fields). It never accepts a username or forwarded identity as proof, uses no shell, emits `Cache-Control: no-store`, and exposes no TCP listener or persistent process.
+The CGI invokes `/usr/syno/synoman/webman/modules/authenticate.cgi` directly, with only bounded CGI values (`HTTP_COOKIE`, the DSM-generated `X-SYNO-TOKEN`, remote/server address, request method and URI, protocol, host, and related CGI fields). It never accepts a username or forwarded identity as proof, uses no shell, emits `Cache-Control: no-store`, and exposes no TCP listener or persistent process. The token is forwarded only to DSM's authentication helper; it is never logged, persisted, returned, or treated as identity.
 
 Build and record the exact source revision and digest:
 
@@ -30,7 +30,7 @@ Build and record the exact source revision and digest:
 ./scripts/build-spk.sh
 file dist/stage/package/ui/runtime.cgi
 ldd dist/stage/package/ui/runtime.cgi || true
-sha256sum dist/mediainfo-poc-0.1.0-0011-v1000.spk
+sha256sum dist/mediainfo-poc-0.1.0-0012-v1000.spk
 ```
 
 Install the SPK manually in Package Center. Do not add Web Station or another runtime, alter DSM/nginx files, accept a root privilege declaration, or add a helper/broker. Inspect the managed `dsmuidir` link and the CGI process identity with an administrator guest shell; redact all cookies and session values.
@@ -48,11 +48,11 @@ Use separate non-administrator DSM browser sessions. Record timestamp, request c
 
 | Case | Expected result |
 | --- | --- |
-| Valid active session | `200`, controlled JSON, identity produced by DSM helper |
+| Valid active session and DSM-generated `X-SYNO-TOKEN` | `200`, controlled JSON, identity produced by DSM helper |
 | No session | `401`, controlled JSON, `Cache-Control: no-store` |
 | Logged-out session | `401` after DSM logout |
 | Expired session | `401` after normal expiry or a documented expiry test |
-| Forged username / forwarded header / query value | Cannot select or alter identity; only a valid DSM session may return `200` |
+| Forged username / forwarded header / query value | Cannot select or alter identity; only a valid DSM session and valid DSM-generated token may return `200` |
 | Malformed or copied fake cookie | `401`, no session value echoed or logged |
 | POST | `405`, controlled JSON |
 
