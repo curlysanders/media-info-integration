@@ -61,7 +61,7 @@ ss -ltnp | grep runtime-probe || true
 
 With an authenticated DSM browser session, request `http://NAS:5000/mediainfo-poc/runtime`. The expected success response is controlled JSON with `runtime`, `revision`, numeric `uid` and `gid`, and the DSM-authenticated `user`. Never copy a session cookie into an evidence report.
 
-Repeat after stopping, starting, and restarting the package. The package lifecycle controls `pkguser-runtime-probe.service` through `synosystemctl --user`; verify it, rather than an orphaned background PID. After an uninstall/reinstall cycle, verify the route, socket, user unit, and process are absent after uninstall and return after reinstall. Record the browser-visible result and sanitized shell output.
+Repeat after stopping, starting, and restarting the package. The package lifecycle controls `pkguser-runtime-probe.service` through `synosystemctl`; verify it, rather than an orphaned background PID. After an uninstall/reinstall cycle, verify the route, socket, user unit, and process are absent after uninstall and return after reinstall. Record the browser-visible result and sanitized shell output.
 
 ## 4. P1-003 boundary
 

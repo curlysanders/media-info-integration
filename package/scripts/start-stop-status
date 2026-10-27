@@ -3,8 +3,8 @@
 UNIT="pkguser-runtime-probe.service"
 
 case "$1" in
-    start) synosystemctl --user start "$UNIT" ;;
-    stop) synosystemctl --user stop "$UNIT" ;;
-    status) synosystemctl --user is-active --quiet "$UNIT" ;;
+    start) synosystemctl start "$UNIT" ;;
+    stop) synosystemctl stop "$UNIT" ;;
+    status) synosystemctl is-active --quiet "$UNIT" ;;
     *) exit 1 ;;
 esac

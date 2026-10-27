@@ -1,8 +1,0 @@
-[Unit]
-Description=MediaInfo P1 runtime proof FastCGI service
-
-[Service]
-Type=simple
-ExecStart=/var/packages/mediainfo-poc/target/bin/runtime-probe -socket /var/packages/mediainfo-poc/var/runtime.sock -revision 0.1.0-2
-Restart=on-failure
-RestartSec=1
