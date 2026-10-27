@@ -1,27 +1,10 @@
 #!/bin/sh
 
-PKGVAR="/var/packages/mediainfo-poc/var"
-SOCKET="$PKGVAR/runtime.sock"
-PIDFILE="$PKGVAR/runtime.pid"
-BIN="/var/packages/mediainfo-poc/target/bin/runtime-probe"
-REVISION="${SYNOPKG_PKGVER:-0.1.0-1}"
-
-is_running() {
-    [ -f "$PIDFILE" ] && kill -0 "$(cat "$PIDFILE")" 2>/dev/null
-}
+UNIT="pkguser-runtime-probe.service"
 
 case "$1" in
-    start)
-        if is_running; then exit 0; fi
-        mkdir -p "$PKGVAR" || exit 1
-        rm -f "$SOCKET" "$PIDFILE"
-        "$BIN" -socket "$SOCKET" -revision "$REVISION" >/dev/null 2>&1 &
-        echo $! > "$PIDFILE"
-        ;;
-    stop)
-        if is_running; then kill -TERM "$(cat "$PIDFILE")"; fi
-        rm -f "$SOCKET" "$PIDFILE"
-        ;;
-    status) is_running ;;
+    start) synosystemctl --user start "$UNIT" ;;
+    stop) synosystemctl --user stop "$UNIT" ;;
+    status) synosystemctl --user is-active --quiet "$UNIT" ;;
     *) exit 1 ;;
 esac

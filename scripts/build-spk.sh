@@ -8,7 +8,7 @@ VERSION=$(sed -n 's/^version="\(.*\)"$/\1/p' "$ROOT/package/INFO")
 ARCH=$(sed -n 's/^arch="\(.*\)"$/\1/p' "$ROOT/package/INFO")
 
 rm -rf "$STAGE"
-mkdir -p "$STAGE/package/bin" "$STAGE/package/nginx" "$STAGE/package/conf" "$STAGE/scripts"
+mkdir -p "$STAGE/package/bin" "$STAGE/package/nginx" "$STAGE/package/conf/systemd" "$STAGE/scripts"
 
 docker run --rm \
   --user "$(id -u):$(id -g)" \
@@ -21,6 +21,7 @@ docker run --rm \
 cp "$ROOT/package/INFO" "$STAGE/INFO"
 cp -R "$ROOT/package/conf" "$STAGE/conf"
 cp -R "$ROOT/package/nginx/." "$STAGE/package/nginx/"
+cp "$ROOT/package/conf/systemd/pkguser-runtime-probe.service" "$STAGE/conf/systemd/pkguser-runtime-probe.service"
 cp "$ROOT/package/scripts/start-stop-status" "$STAGE/scripts/start-stop-status"
 chmod 0755 "$STAGE/scripts/start-stop-status" "$STAGE/package/bin/runtime-probe"
 (cd "$STAGE/package" && tar -czf ../package.tgz bin nginx)
