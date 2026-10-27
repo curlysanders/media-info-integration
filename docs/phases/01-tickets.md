@@ -13,7 +13,7 @@ For API, runtime, or tooling documentation, consult Context7 first. If authorita
 | Ticket | Outcome | Dependencies | Status |
 | --- | --- | --- | --- |
 | [P1-001](#p1-001--establish-the-disposable-test-environment) | Environment inventory and reproducible fixtures | — | Complete |
-| [P1-002](#p1-002--select-and-prove-the-package-request-runtime) | PHP assessment and runtime decision | P1-001 | In progress |
+| [P1-002](#p1-002--select-and-prove-the-package-request-runtime) | PHP assessment and runtime decision | P1-001 | Blocked — no documented standalone authenticated request route |
 | [P1-003](#p1-003--prove-authenticated-package-routing) | Authenticated and protected request route | P1-002 | Planned |
 | [P1-004](#p1-004--prove-user-authorization-for-the-exact-opened-file) | Effective user authorization and safe file access | P1-003 | Planned |
 | [P1-005](#p1-005--demonstrate-controlled-one-file-mediainfo-analysis) | Reproducible one-file JSON demonstration | P1-004 | Planned |
@@ -49,10 +49,10 @@ For API, runtime, or tooling documentation, consult Context7 first. If authorita
 
 **Acceptance criteria:**
 
-- [ ] Record PHP executable, version, SAPI, enabled extensions, visibility/execution under the package account, candidate authentication route, and documented support status.
+- [x] Record PHP executable, version, SAPI, enabled extensions, visibility/execution under the package account, candidate authentication route, and documented support status.
 - [ ] Demonstrate a package-owned request route under the package account without global DSM/nginx edits or another installed runtime dependency.
-- [ ] Distinguish an observed PHP installation from a documented third-party runtime contract; do not use CLI PHP as an HTTP handler or the PHP development server as the production route.
-- [ ] Record the PHP gate outcome and rationale. If it fails, build and demonstrate a bundled static Go standard-library executable for the tested architecture, recording compiler/build details without requiring Go on the NAS.
+- [x] Distinguish an observed PHP installation from a documented third-party runtime contract; do not use CLI PHP as an HTTP handler or the PHP development server as the production route.
+- [x] Record the PHP gate outcome and rationale. If it fails, build and demonstrate a bundled static Go standard-library executable for the tested architecture, recording compiler/build details without requiring Go on the NAS.
 - [ ] Record selected runtime version, prototype package revision, routing mechanism, and unresolved security assumptions for P1-003.
 
 **Required evidence:** Runtime inventory, route demonstration, primary-source support assessment, and explicit PHP-or-Go decision. No untested architecture is claimed supported. The [P1-002 runbook](../testing/p1-002-runbook.md) and [dated evidence report](../testing/p1-002-evidence-2026-10-27.md) track this work.
