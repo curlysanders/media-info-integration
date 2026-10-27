@@ -1,10 +1,10 @@
 #!/bin/sh
 
 PKGVAR="/var/packages/mediainfo-poc/var"
-SOCKET="$PKGVAR/runtime.sock"
+SOCKET="$PKGVAR/nginx/runtime.sock"
 PIDFILE="$PKGVAR/runtime.pid"
 BIN="/var/packages/mediainfo-poc/target/bin/runtime-probe"
-REVISION="${SYNOPKG_PKGVER:-0.1.0-1}"
+REVISION="${SYNOPKG_PKGVER:-0.1.0-0006}"
 
 is_running() {
     [ -f "$PIDFILE" ] && kill -0 "$(cat "$PIDFILE")" 2>/dev/null

@@ -20,7 +20,7 @@ import (
 )
 
 const (
-	defaultSocket        = "/var/packages/mediainfo-poc/var/runtime.sock"
+	defaultSocket        = "/var/packages/mediainfo-poc/var/nginx/runtime.sock"
 	defaultAuthenticator = "/usr/syno/synoman/webman/modules/authenticate.cgi"
 	maxIdentityBytes     = 256
 	authTimeout          = 2 * time.Second
@@ -86,8 +86,13 @@ func main() {
 	revision := flag.String("revision", "dev", "prototype package revision")
 	authenticatorPath := flag.String("authenticator", defaultAuthenticator, "DSM authentication helper")
 	flag.Parse()
-	if err := os.MkdirAll(filepath.Dir(*socket), 0700); err != nil {
-		log.Fatalf("create socket directory: %v", err)
+	socketDirectory := filepath.Dir(*socket)
+	info, err := os.Stat(socketDirectory)
+	if err != nil {
+		log.Fatalf("inspect socket directory: %v", err)
+	}
+	if !info.IsDir() {
+		log.Fatalf("socket directory is not a directory: %s", socketDirectory)
 	}
 	if err := os.Remove(*socket); err != nil && !errors.Is(err, os.ErrNotExist) {
 		log.Fatalf("remove stale socket: %v", err)

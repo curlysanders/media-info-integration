@@ -1,0 +1,8 @@
+#!/bin/sh
+set -eu
+
+SOCKET_DIRECTORY="/var/packages/mediainfo-poc/var/nginx"
+
+mkdir -p "$SOCKET_DIRECTORY"
+chown mediainfo-poc:http "$SOCKET_DIRECTORY"
+chmod 2770 "$SOCKET_DIRECTORY"
