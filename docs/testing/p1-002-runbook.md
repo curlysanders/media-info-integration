@@ -1,6 +1,6 @@
 # P1-002 — package request runtime proof
 
-This runbook exercises the `mediainfo-poc` disposable prototype on `DSM-7.4-Test`. It selects a request runtime without adding an installed runtime dependency. The current prototype is a static `linux/amd64` Go FastCGI executable for the `v1000` VM, exposed through DSM's documented Web Config resource. It is a P1-002 probe only: it does not read files, invoke MediaInfo, accept request bodies, or establish the P1-003 authentication guarantees.
+This runbook records the original `mediainfo-poc` P1-002 disposable FastCGI prototype on `DSM-7.4-Test`. It selected a dependency-free static `linux/amd64` Go fallback for the `v1000` VM, exposed through DSM's documented Web Config resource. That route is rejected for authenticated use because it could not preserve DSM session identity. The successor package-custom-CGI candidate is documented in the [P1-002A runbook](p1-002a-runbook.md); it is a separate live validation gate and does not yet change the P1-002 outcome.
 
 The initial PHP investigation is mandatory. A bundled Go fallback is selected only when the observations show that PHP does not provide a documented, package-owned request SAPI under the package account. An installed CLI binary, DSM's own PHP pool, or PHP's development server does not pass this gate.
 
@@ -43,7 +43,7 @@ Also record the applicable published Synology documentation. As of 27 October 20
 
 Mark PHP **Pass** only if a package-owned CGI/FastCGI execution path, its package-account UID, usable configuration, and a documented support basis are all demonstrated. Otherwise record each failed gate and select Go.
 
-## 3. Install and prove the selected route
+## 3. Historical FastCGI route observation
 
 In Package Center, manually install the generated SPK. Inspect the package details and installation result, then start it. Do not accept any new agreement without separately recording it.
 

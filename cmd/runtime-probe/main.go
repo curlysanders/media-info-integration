@@ -6,51 +6,34 @@ import (
 	"errors"
 	"flag"
 	"fmt"
-	"log"
-	"net"
-	"net/http"
-	"net/http/fcgi"
 	"os"
 	"os/exec"
-	"os/signal"
-	"path/filepath"
 	"strings"
-	"syscall"
 	"time"
 )
 
 const (
-	defaultSocket        = "/var/packages/mediainfo-poc/var/runtime.sock"
 	defaultAuthenticator = "/usr/syno/synoman/webman/modules/authenticate.cgi"
 	maxIdentityBytes     = 256
+	maxEnvironmentValue  = 16 * 1024
 	authTimeout          = 2 * time.Second
 )
 
+var authenticationEnvironmentNames = map[string]struct{}{
+	"GATEWAY_INTERFACE": {}, "HTTPS": {}, "HTTP_COOKIE": {}, "HTTP_HOST": {}, "PATH_INFO": {},
+	"QUERY_STRING": {}, "REMOTE_ADDR": {}, "REQUEST_METHOD": {}, "REQUEST_URI": {}, "SCRIPT_NAME": {},
+	"SERVER_ADDR": {}, "SERVER_NAME": {}, "SERVER_PORT": {}, "SERVER_PROTOCOL": {},
+}
+
 type authenticator interface {
-	AuthenticatedUser(context.Context, *http.Request) (string, error)
+	AuthenticatedUser(context.Context, []string) (string, error)
 }
 
 type cgiAuthenticator struct{ path string }
 
-func (a cgiAuthenticator) AuthenticatedUser(ctx context.Context, request *http.Request) (string, error) {
-	serverAddr := request.Header.Get("X-Dsm-Server-Addr")
+func (a cgiAuthenticator) AuthenticatedUser(ctx context.Context, environment []string) (string, error) {
 	command := exec.CommandContext(ctx, a.path)
-	command.Env = []string{
-		"PATH=/usr/bin:/bin",
-		"GATEWAY_INTERFACE=CGI/1.1",
-		"REQUEST_METHOD=" + request.Method,
-		"SCRIPT_NAME=" + request.URL.Path,
-		"REQUEST_URI=" + request.RequestURI,
-		"QUERY_STRING=" + request.URL.RawQuery,
-		"SERVER_PROTOCOL=" + request.Proto,
-		"SERVER_NAME=" + request.Host,
-		"SERVER_PORT=5000",
-		"HTTP_HOST=" + request.Host,
-		"HTTP_COOKIE=" + request.Header.Get("Cookie"),
-		"REMOTE_ADDR=" + request.RemoteAddr,
-		"SERVER_ADDR=" + serverAddr,
-		"HTTP_X_DSM_SERVER_ADDR=" + serverAddr,
-	}
+	command.Env = authenticationEnvironment(environment)
 	output, err := command.Output()
 	if errors.Is(ctx.Err(), context.DeadlineExceeded) {
 		return "", errors.New("authentication helper timed out")
@@ -68,6 +51,20 @@ func (a cgiAuthenticator) AuthenticatedUser(ctx context.Context, request *http.R
 	return username, nil
 }
 
+func authenticationEnvironment(environment []string) []string {
+	filtered := []string{"PATH=/usr/bin:/bin"}
+	for _, item := range environment {
+		name, value, found := strings.Cut(item, "=")
+		if !found || len(value) > maxEnvironmentValue {
+			continue
+		}
+		if _, allowed := authenticationEnvironmentNames[name]; allowed {
+			filtered = append(filtered, item)
+		}
+	}
+	return filtered
+}
+
 type response struct {
 	Runtime  string `json:"runtime"`
 	Revision string `json:"revision"`
@@ -76,59 +73,52 @@ type response struct {
 	User     string `json:"user"`
 }
 
-func runtimeHandler(auth authenticator, revision string) http.Handler {
-	return http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
-		writer.Header().Set("Cache-Control", "no-store")
-		writer.Header().Set("Content-Type", "application/json; charset=utf-8")
-		if request.Method != http.MethodGet {
-			writer.Header().Set("Allow", http.MethodGet)
-			http.Error(writer, `{"error":"method not allowed"}`, http.StatusMethodNotAllowed)
-			return
+func probeResponse(ctx context.Context, auth authenticator, environment []string, revision string, uid, gid int) (int, []byte) {
+	if requestMethod(environment) != "GET" {
+		return 405, []byte(`{"error":"method not allowed"}`)
+	}
+	timedContext, cancel := context.WithTimeout(ctx, authTimeout)
+	defer cancel()
+	username, err := auth.AuthenticatedUser(timedContext, environment)
+	if err != nil {
+		return 401, []byte(`{"error":"authentication required"}`)
+	}
+	body, err := json.Marshal(response{Runtime: "go-cgi", Revision: revision, UID: uid, GID: gid, User: username})
+	if err != nil {
+		return 500, []byte(`{"error":"response encoding failed"}`)
+	}
+	return 200, append(body, '\n')
+}
+
+func requestMethod(environment []string) string {
+	for _, item := range environment {
+		if method, found := strings.CutPrefix(item, "REQUEST_METHOD="); found {
+			return method
 		}
-		ctx, cancel := context.WithTimeout(request.Context(), authTimeout)
-		defer cancel()
-		username, err := auth.AuthenticatedUser(ctx, request)
-		if err != nil {
-			http.Error(writer, `{"error":"authentication required"}`, http.StatusUnauthorized)
-			return
-		}
-		writer.WriteHeader(http.StatusOK)
-		_ = json.NewEncoder(writer).Encode(response{Runtime: "go-fastcgi", Revision: revision, UID: os.Getuid(), GID: os.Getgid(), User: username})
-	})
+	}
+	return ""
 }
 
 func main() {
-	socket := flag.String("socket", defaultSocket, "Unix socket for the FastCGI server")
 	revision := flag.String("revision", "dev", "prototype package revision")
 	authenticatorPath := flag.String("authenticator", defaultAuthenticator, "DSM authentication helper")
 	flag.Parse()
-	socketDirectory := filepath.Dir(*socket)
-	info, err := os.Stat(socketDirectory)
-	if err != nil {
-		log.Fatalf("inspect socket directory: %v", err)
-	}
-	if !info.IsDir() {
-		log.Fatalf("socket directory is not a directory: %s", socketDirectory)
-	}
-	if err := os.Remove(*socket); err != nil && !errors.Is(err, os.ErrNotExist) {
-		log.Fatalf("remove stale socket: %v", err)
-	}
-	listener, err := net.Listen("unix", *socket)
-	if err != nil {
-		log.Fatalf("listen on socket: %v", err)
-	}
-	if err := os.Chmod(*socket, 0666); err != nil {
-		_ = listener.Close()
-		log.Fatalf("set socket mode: %v", err)
-	}
-	defer func() { _ = listener.Close(); _ = os.Remove(*socket) }()
-	server := http.NewServeMux()
-	server.Handle("/mediainfo-poc/runtime", runtimeHandler(cgiAuthenticator{path: *authenticatorPath}, *revision))
-	terminated := make(chan os.Signal, 1)
-	signal.Notify(terminated, syscall.SIGINT, syscall.SIGTERM)
-	go func() { <-terminated; _ = listener.Close() }()
-	if err := fcgi.Serve(listener, server); err != nil && !errors.Is(err, net.ErrClosed) {
-		fmt.Fprintf(os.Stderr, "serve FastCGI: %v\n", err)
-		os.Exit(1)
+	status, body := probeResponse(context.Background(), cgiAuthenticator{path: *authenticatorPath}, os.Environ(), *revision, os.Getuid(), os.Getgid())
+	fmt.Printf("Status: %d %s\r\n", status, statusText(status))
+	fmt.Print("Content-Type: application/json; charset=utf-8\r\n")
+	fmt.Print("Cache-Control: no-store\r\n\r\n")
+	_, _ = os.Stdout.Write(body)
+}
+
+func statusText(status int) string {
+	switch status {
+	case 200:
+		return "OK"
+	case 401:
+		return "Unauthorized"
+	case 405:
+		return "Method Not Allowed"
+	default:
+		return "Internal Server Error"
 	}
 }
