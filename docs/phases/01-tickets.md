@@ -15,7 +15,7 @@ For API, runtime, or tooling documentation, consult Context7 first. If authorita
 | [P1-001](#p1-001--establish-the-disposable-test-environment) | Environment inventory and reproducible fixtures | — | Complete |
 | [P1-002](#p1-002--select-and-prove-the-package-request-runtime) | PHP assessment and runtime decision | P1-001 | Complete — static Go custom CGI selected for `v1000` |
 | [P1-002A](#p1-002a--research-a-documented-identity-preserving-package-request-mechanism) | Documented standalone-package identity hand-off decision | P1-002 | Complete — version-scoped DSM 7.4 evidence recorded |
-| [P1-003](#p1-003--prove-authenticated-package-routing) | Authenticated and protected request route | P1-002A | Planned — dependencies satisfied |
+| [P1-003](#p1-003--prove-authenticated-package-routing) | Authenticated and protected request route | P1-002A | In progress — direct policy proof recorded; matrix and proxy validation pending |
 | [P1-004](#p1-004--prove-user-authorization-for-the-exact-opened-file) | Effective user authorization and safe file access | P1-003 | Planned |
 | [P1-005](#p1-005--demonstrate-controlled-one-file-mediainfo-analysis) | Reproducible one-file JSON demonstration | P1-004 | Planned |
 | [P1-006](#p1-006--validate-containment-resource-limits-and-cleanup) | Measured limits, cancellation, and cleanup | P1-005 | Planned |
@@ -93,7 +93,7 @@ For API, runtime, or tooling documentation, consult Context7 first. If authorita
 - [ ] Verify HTTPS/proxy handling without trusting unvalidated forwarded headers as identity or security proof.
 - [ ] Keep credentials/session material out of URLs, logs, persistent storage, and child arguments; return controlled errors and session-scoped responses with `Cache-Control: no-store`.
 
-**Required evidence:** Sanitized request/result matrix for both users and route configurations, including expiry/logout and forgery cases. If the runtime cannot satisfy these checks, update P1-002 before continuing.
+**Required evidence:** Sanitized request/result matrix for both users and route configurations, including expiry/logout and forgery cases. The [P1-003 runbook](../testing/p1-003-runbook.md), [evidence template](../testing/p1-003-evidence-template.md), and [dated direct-route observations](../testing/p1-003-evidence-2026-10-28.md) track the required live proof. If the runtime cannot satisfy these checks, update P1-002 before continuing.
 
 ## P1-004 — Prove user authorization for the exact opened file
 
