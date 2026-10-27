@@ -34,7 +34,16 @@ type cgiAuthenticator struct{ path string }
 
 func (a cgiAuthenticator) AuthenticatedUser(ctx context.Context, header http.Header, remoteAddr, serverAddr string) (string, error) {
 	command := exec.CommandContext(ctx, a.path)
-	command.Env = []string{"PATH=/usr/bin:/bin", "HTTP_COOKIE=" + header.Get("Cookie"), "REMOTE_ADDR=" + remoteAddr, "SERVER_ADDR=" + serverAddr}
+	command.Env = []string{
+		"PATH=/usr/bin:/bin",
+		"GATEWAY_INTERFACE=CGI/1.1",
+		"REQUEST_METHOD=GET",
+		"SCRIPT_NAME=/mediainfo-poc/runtime",
+		"HTTP_COOKIE=" + header.Get("Cookie"),
+		"REMOTE_ADDR=" + remoteAddr,
+		"SERVER_ADDR=" + serverAddr,
+		"HTTP_X_DSM_SERVER_ADDR=" + serverAddr,
+	}
 	output, err := command.Output()
 	if errors.Is(ctx.Err(), context.DeadlineExceeded) {
 		return "", errors.New("authentication helper timed out")
