@@ -3,8 +3,6 @@ package main
 import (
 	"context"
 	"errors"
-	"net/http"
-	"net/http/httptest"
 	"strings"
 	"testing"
 )
@@ -14,45 +12,63 @@ type fakeAuthenticator struct {
 	err  error
 }
 
-func (f fakeAuthenticator) AuthenticatedUser(context.Context, *http.Request) (string, error) {
+func (f fakeAuthenticator) AuthenticatedUser(context.Context, []string) (string, error) {
 	return f.user, f.err
 }
 
-func TestRuntimeHandlerReturnsAuthenticatedPackageProbe(t *testing.T) {
-	request := httptest.NewRequest(http.MethodGet, "/mediainfo-poc/runtime", nil)
-	request.Header.Set("X-Forwarded-User", "forged")
-	request.Header.Set("X-Dsm-Server-Addr", "192.0.2.1")
-	response := httptest.NewRecorder()
-	runtimeHandler(fakeAuthenticator{user: "dsm-user"}, "abc123").ServeHTTP(response, request)
-	if response.Code != http.StatusOK {
-		t.Fatalf("status = %d, want %d", response.Code, http.StatusOK)
+func TestProbeResponseReturnsDSMAuthenticatedPackageProbe(t *testing.T) {
+	status, body := probeResponse(context.Background(), fakeAuthenticator{user: "dsm-user"}, []string{
+		"REQUEST_METHOD=GET",
+		"HTTP_X_FORWARDED_USER=forged",
+	}, "abc123", 123, 456)
+	if status != 200 {
+		t.Fatalf("status = %d, want 200", status)
 	}
-	if got := response.Header().Get("Cache-Control"); got != "no-store" {
-		t.Fatalf("Cache-Control = %q, want no-store", got)
+	if !strings.Contains(string(body), `"user":"dsm-user"`) {
+		t.Fatalf("response does not contain authenticated user: %s", body)
 	}
-	if !strings.Contains(response.Body.String(), `"user":"dsm-user"`) {
-		t.Fatalf("response does not contain authenticated user: %s", response.Body.String())
-	}
-	if strings.Contains(response.Body.String(), "forged") {
-		t.Fatalf("response trusts forged forwarded identity: %s", response.Body.String())
+	if strings.Contains(string(body), "forged") {
+		t.Fatalf("response trusts forged forwarded identity: %s", body)
 	}
 }
 
-func TestRuntimeHandlerFailsClosedWhenAuthenticationFails(t *testing.T) {
-	response := httptest.NewRecorder()
-	runtimeHandler(fakeAuthenticator{err: errors.New("helper failed")}, "abc123").ServeHTTP(response, httptest.NewRequest(http.MethodGet, "/mediainfo-poc/runtime", nil))
-	if response.Code != http.StatusUnauthorized {
-		t.Fatalf("status = %d, want %d", response.Code, http.StatusUnauthorized)
+func TestProbeResponseFailsClosedWhenAuthenticationFails(t *testing.T) {
+	status, _ := probeResponse(context.Background(), fakeAuthenticator{err: errors.New("helper failed")}, []string{"REQUEST_METHOD=GET"}, "abc123", 123, 456)
+	if status != 401 {
+		t.Fatalf("status = %d, want 401", status)
 	}
 }
 
-func TestRuntimeHandlerRejectsUnsupportedMethods(t *testing.T) {
-	response := httptest.NewRecorder()
-	runtimeHandler(fakeAuthenticator{user: "dsm-user"}, "abc123").ServeHTTP(response, httptest.NewRequest(http.MethodPost, "/mediainfo-poc/runtime", nil))
-	if response.Code != http.StatusMethodNotAllowed {
-		t.Fatalf("status = %d, want %d", response.Code, http.StatusMethodNotAllowed)
+func TestProbeResponseRejectsUnsupportedMethods(t *testing.T) {
+	status, body := probeResponse(context.Background(), fakeAuthenticator{user: "dsm-user"}, []string{"REQUEST_METHOD=POST"}, "abc123", 123, 456)
+	if status != 405 {
+		t.Fatalf("status = %d, want 405", status)
 	}
-	if got := response.Header().Get("Allow"); got != http.MethodGet {
-		t.Fatalf("Allow = %q, want GET", got)
+	if string(body) != `{"error":"method not allowed"}` {
+		t.Fatalf("body = %s", body)
+	}
+}
+
+func TestAuthenticationEnvironmentKeepsOnlyDocumentedCGIContext(t *testing.T) {
+	filtered := strings.Join(authenticationEnvironment([]string{
+		"REQUEST_METHOD=GET", "HTTP_COOKIE=session-value", "REMOTE_ADDR=192.0.2.1", "SERVER_ADDR=192.0.2.2",
+		"HTTP_X_SYNO_TOKEN=dsm-csrf-token", "HTTP_X_FORWARDED_USER=forged", "AWS_SECRET_ACCESS_KEY=not-for-helper",
+	}), "\n")
+	for _, expected := range []string{"PATH=/usr/bin:/bin", "REQUEST_METHOD=GET", "HTTP_COOKIE=session-value", "REMOTE_ADDR=192.0.2.1", "SERVER_ADDR=192.0.2.2", "HTTP_X_SYNO_TOKEN=dsm-csrf-token"} {
+		if !strings.Contains(filtered, expected) {
+			t.Fatalf("environment missing %q: %s", expected, filtered)
+		}
+	}
+	for _, forbidden := range []string{"HTTP_X_FORWARDED_USER", "AWS_SECRET_ACCESS_KEY"} {
+		if strings.Contains(filtered, forbidden) {
+			t.Fatalf("environment contains %q: %s", forbidden, filtered)
+		}
+	}
+}
+
+func TestAuthenticationEnvironmentDropsOversizedValues(t *testing.T) {
+	filtered := strings.Join(authenticationEnvironment([]string{"HTTP_COOKIE=" + strings.Repeat("x", maxEnvironmentValue+1)}), "\n")
+	if strings.Contains(filtered, "HTTP_COOKIE=") {
+		t.Fatalf("environment retains oversized cookie")
 	}
 }
