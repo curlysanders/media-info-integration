@@ -10,4 +10,4 @@ An open-source DSM 7.4 package is planned, not implemented. Phase 2 delivers a s
 | [Git workflow](docs/workflow.md) | Short-lived branches, signed commits, pull requests, and squash merging |
 | [Contributor guidance](AGENTS.md) | Runtime, dependency, security, documentation, and DSM boundary rules |
 
-The only planned externally installed runtime dependency is SynoCommunity MediaInfo. Built-in DSM PHP will be assessed during Phase 1; a small bundled Go executable is the fallback if PHP cannot safely host the package route. No File Station Properties-tab hook has been found.
+The only planned externally installed runtime dependency is SynoCommunity MediaInfo. Built-in DSM PHP is assessed during Phase 1; the P1-002 disposable prototype contains a small bundled Go FastCGI fallback if PHP cannot safely host the package route. No File Station Properties-tab hook has been found.

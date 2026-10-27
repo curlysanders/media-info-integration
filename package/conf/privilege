@@ -1,0 +1,13 @@
+{
+  "defaults": {
+    "run-as": "package"
+  },
+  "username": "mediainfo-poc",
+  "groupname": "mediainfo-poc",
+  "executable": [
+    {
+      "relpath": "bin/runtime-probe",
+      "run-as": "package"
+    }
+  ]
+}
