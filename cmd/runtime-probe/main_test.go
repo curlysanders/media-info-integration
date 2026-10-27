@@ -14,7 +14,7 @@ type fakeAuthenticator struct {
 	err  error
 }
 
-func (f fakeAuthenticator) AuthenticatedUser(context.Context, http.Header, string, string) (string, error) {
+func (f fakeAuthenticator) AuthenticatedUser(context.Context, *http.Request) (string, error) {
 	return f.user, f.err
 }
 

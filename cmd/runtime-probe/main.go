@@ -27,20 +27,27 @@ const (
 )
 
 type authenticator interface {
-	AuthenticatedUser(context.Context, http.Header, string, string) (string, error)
+	AuthenticatedUser(context.Context, *http.Request) (string, error)
 }
 
 type cgiAuthenticator struct{ path string }
 
-func (a cgiAuthenticator) AuthenticatedUser(ctx context.Context, header http.Header, remoteAddr, serverAddr string) (string, error) {
+func (a cgiAuthenticator) AuthenticatedUser(ctx context.Context, request *http.Request) (string, error) {
+	serverAddr := request.Header.Get("X-Dsm-Server-Addr")
 	command := exec.CommandContext(ctx, a.path)
 	command.Env = []string{
 		"PATH=/usr/bin:/bin",
 		"GATEWAY_INTERFACE=CGI/1.1",
-		"REQUEST_METHOD=GET",
-		"SCRIPT_NAME=/mediainfo-poc/runtime",
-		"HTTP_COOKIE=" + header.Get("Cookie"),
-		"REMOTE_ADDR=" + remoteAddr,
+		"REQUEST_METHOD=" + request.Method,
+		"SCRIPT_NAME=" + request.URL.Path,
+		"REQUEST_URI=" + request.RequestURI,
+		"QUERY_STRING=" + request.URL.RawQuery,
+		"SERVER_PROTOCOL=" + request.Proto,
+		"SERVER_NAME=" + request.Host,
+		"SERVER_PORT=5000",
+		"HTTP_HOST=" + request.Host,
+		"HTTP_COOKIE=" + request.Header.Get("Cookie"),
+		"REMOTE_ADDR=" + request.RemoteAddr,
 		"SERVER_ADDR=" + serverAddr,
 		"HTTP_X_DSM_SERVER_ADDR=" + serverAddr,
 	}
@@ -80,7 +87,7 @@ func runtimeHandler(auth authenticator, revision string) http.Handler {
 		}
 		ctx, cancel := context.WithTimeout(request.Context(), authTimeout)
 		defer cancel()
-		username, err := auth.AuthenticatedUser(ctx, request.Header, request.RemoteAddr, request.Header.Get("X-Dsm-Server-Addr"))
+		username, err := auth.AuthenticatedUser(ctx, request)
 		if err != nil {
 			http.Error(writer, `{"error":"authentication required"}`, http.StatusUnauthorized)
 			return
