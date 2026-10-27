@@ -61,7 +61,7 @@ ss -ltnp | grep runtime-probe || true
 
 With an authenticated DSM browser session, request `http://NAS:5000/mediainfo-poc/runtime`. The expected success response is controlled JSON with `runtime`, `revision`, numeric `uid` and `gid`, and the DSM-authenticated `user`. Never copy a session cookie into an evidence report.
 
-Repeat after stopping, starting, and restarting the package. Verify the package-private PID file, process, and `synopkg status` together rather than relying on an orphaned PID. The socket must be `0660 mediainfo-poc:http` inside the `2770 mediainfo-poc:http` `var/nginx` directory, so DSM nginx has only group-level access. After an uninstall/reinstall cycle, verify the route, socket, PID file, and process are absent after uninstall and return after reinstall. Record the browser-visible result and sanitized shell output.
+Repeat after stopping, starting, and restarting the package. Verify the package-private PID file, process, and `synopkg status` together rather than relying on an orphaned PID. The local Unix socket is `0666` solely so DSM nginx's fixed `http` account can connect without a root privilege declaration; it opens no TCP port, and the FastCGI handler authenticates every request with DSM before returning data. After an uninstall/reinstall cycle, verify the route, socket, PID file, and process are absent after uninstall and return after reinstall. Record the browser-visible result and sanitized shell output.
 
 ## 4. P1-003 boundary
 

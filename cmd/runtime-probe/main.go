@@ -20,7 +20,7 @@ import (
 )
 
 const (
-	defaultSocket        = "/var/packages/mediainfo-poc/var/nginx/runtime.sock"
+	defaultSocket        = "/var/packages/mediainfo-poc/var/runtime.sock"
 	defaultAuthenticator = "/usr/syno/synoman/webman/modules/authenticate.cgi"
 	maxIdentityBytes     = 256
 	authTimeout          = 2 * time.Second
@@ -101,7 +101,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("listen on socket: %v", err)
 	}
-	if err := os.Chmod(*socket, 0660); err != nil {
+	if err := os.Chmod(*socket, 0666); err != nil {
 		_ = listener.Close()
 		log.Fatalf("set socket mode: %v", err)
 	}
