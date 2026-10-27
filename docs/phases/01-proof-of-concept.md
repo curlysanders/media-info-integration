@@ -16,9 +16,9 @@ The actionable backlog, dependencies, and evidence requirements are in the [Phas
 
 ### 1. Establish the package request runtime
 
-Inventory the built-in PHP executable, version, SAPI, enabled extensions, package-account access, and a package-owned authenticated request route. Validate that identity is derived from the DSM request environment and that session expiry, logout, CSRF, origin checks, and proxy HTTPS behavior work.
+Inventory the built-in PHP executable, version, SAPI, enabled extensions, package-account access, and candidate package request route. Before treating any runtime as viable, establish a documented DSM mechanism that transfers authenticated request identity to a standalone package without an additional installed runtime or privileged bridge. Validate that identity is derived from the DSM request environment and that session expiry, logout, CSRF, origin checks, and proxy HTTPS behavior work.
 
-An observed PHP installation is not itself a supported runtime guarantee. Do not use the CLI as an HTTP handler or PHP's built-in development server in production. If PHP cannot meet the route and security requirements without another installed dependency, replace it with a small static Go standard-library executable built for the tested architecture.
+An observed PHP installation is not itself a supported runtime guarantee. Do not use the CLI as an HTTP handler or PHP's built-in development server in production. If PHP cannot meet the route and security requirements without another installed dependency, a small static Go standard-library executable may be used only after that identity-preserving mechanism has been demonstrated for the tested architecture. A static listener or FastCGI endpoint alone is not a successful route.
 
 ### 2. Prove authorization and analysis safety
 
@@ -52,4 +52,4 @@ Do not patch File Station, inject browser JavaScript, or alter its Properties di
 
 ## Blockers and exclusions
 
-Inability to preserve effective user read authorization blocks Phase 2. An unavailable `fb_extern` route only blocks Phase 3. Do not add a root broker, setuid helper, broad share grant, Web Station dependency, browser companion, DSM patch, or Properties-tab modification to bypass either result.
+The absence of a documented identity-preserving standalone-package mechanism blocks P1-003 through P1-006 and Phase 2; record the negative research result rather than bypassing it. Inability to preserve effective user read authorization also blocks Phase 2. An unavailable `fb_extern` route only blocks Phase 3. Do not add a root broker, setuid helper, broad share grant, Web Station dependency, browser companion, DSM patch, or Properties-tab modification to bypass either result.
