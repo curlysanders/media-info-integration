@@ -1,6 +1,6 @@
 # Phase 1 tickets — Proof of concept
 
-These tickets implement the [Phase 1 roadmap](01-proof-of-concept.md). P1-001 is complete on the disposable `DSM-7.4-Test` VM; later tickets remain **Planned**. Results are scoped to that Arc Loader VM, not physical Synology hardware. DSM 7.4 is the target. DSM 7.3 compatibility and the usable standalone product belong to later work.
+These tickets implement the [Phase 1 roadmap](01-proof-of-concept.md). P1-001 is complete on the disposable `DSM-7.4-Test` VM. P1-002 is **Blocked** pending the planned P1-002A research gate; the remaining tickets are **Planned**. Results are scoped to that Arc Loader VM, not physical Synology hardware. DSM 7.4 is the target. DSM 7.3 compatibility and the usable standalone product belong to later work.
 
 ## Execution and evidence
 
@@ -13,13 +13,14 @@ For API, runtime, or tooling documentation, consult Context7 first. If authorita
 | Ticket | Outcome | Dependencies | Status |
 | --- | --- | --- | --- |
 | [P1-001](#p1-001--establish-the-disposable-test-environment) | Environment inventory and reproducible fixtures | — | Complete |
-| [P1-002](#p1-002--select-and-prove-the-package-request-runtime) | PHP assessment and runtime decision | P1-001 | Planned |
-| [P1-003](#p1-003--prove-authenticated-package-routing) | Authenticated and protected request route | P1-002 | Planned |
+| [P1-002](#p1-002--select-and-prove-the-package-request-runtime) | PHP assessment and runtime decision | P1-001 | Blocked — no documented standalone authenticated request route |
+| [P1-002A](#p1-002a--research-a-documented-identity-preserving-package-request-mechanism) | Documented standalone-package identity hand-off decision | P1-002 | Planned |
+| [P1-003](#p1-003--prove-authenticated-package-routing) | Authenticated and protected request route | P1-002A | Planned |
 | [P1-004](#p1-004--prove-user-authorization-for-the-exact-opened-file) | Effective user authorization and safe file access | P1-003 | Planned |
 | [P1-005](#p1-005--demonstrate-controlled-one-file-mediainfo-analysis) | Reproducible one-file JSON demonstration | P1-004 | Planned |
 | [P1-006](#p1-006--validate-containment-resource-limits-and-cleanup) | Measured limits, cancellation, and cleanup | P1-005 | Planned |
 | [P1-007](#p1-007--investigate-file-station-compatibility) | Independent, version-scoped compatibility result | P1-001 | Planned |
-| [P1-008](#p1-008--consolidate-evidence-and-record-readiness-decisions) | Separate Phase 2 and Phase 3 decisions | P1-001–P1-007 results | Planned |
+| [P1-008](#p1-008--consolidate-evidence-and-record-readiness-decisions) | Separate Phase 2 and Phase 3 decisions | P1-001–P1-007 and P1-002A results | Planned |
 
 ## P1-001 — Establish the disposable test environment
 
@@ -45,23 +46,41 @@ For API, runtime, or tooling documentation, consult Context7 first. If authorita
 
 **Dependencies:** P1-001.
 
-**Work:** Test DSM's built-in PHP first. Assess whether it can host the package request route and support the security checks in P1-003. If it cannot meet that gate, prove a small bundled Go executable using only the standard library for the tested architecture. Revisit the decision if P1-003 exposes a runtime limitation.
+**Work:** Test DSM's built-in PHP first. Assess whether it can host the package request route and support the security checks in P1-003. If it cannot meet that gate, build a small bundled Go executable using only the standard library for the tested architecture. A runtime is not selected until P1-002A demonstrates a documented identity-preserving standalone-package request mechanism. Revisit the decision if P1-003 exposes a runtime limitation.
 
 **Acceptance criteria:**
 
-- [ ] Record PHP executable, version, SAPI, enabled extensions, visibility/execution under the package account, candidate authentication route, and documented support status.
-- [ ] Demonstrate a package-owned request route under the package account without global DSM/nginx edits or another installed runtime dependency.
-- [ ] Distinguish an observed PHP installation from a documented third-party runtime contract; do not use CLI PHP as an HTTP handler or the PHP development server as the production route.
-- [ ] Record the PHP gate outcome and rationale. If it fails, build and demonstrate a bundled static Go standard-library executable for the tested architecture, recording compiler/build details without requiring Go on the NAS.
+- [x] Record PHP executable, version, SAPI, enabled extensions, visibility/execution under the package account, candidate authentication route, and documented support status.
+- [ ] Demonstrate a package-owned request route under the package account without global DSM/nginx edits or another installed runtime dependency, after P1-002A validates the identity hand-off mechanism.
+- [x] Distinguish an observed PHP installation from a documented third-party runtime contract; do not use CLI PHP as an HTTP handler or the PHP development server as the production route.
+- [x] Record the PHP gate outcome and rationale. If it fails, build and demonstrate a bundled static Go standard-library executable for the tested architecture, recording compiler/build details without requiring Go on the NAS.
 - [ ] Record selected runtime version, prototype package revision, routing mechanism, and unresolved security assumptions for P1-003.
 
-**Required evidence:** Runtime inventory, route demonstration, primary-source support assessment, and explicit PHP-or-Go decision. No untested architecture is claimed supported.
+**Required evidence:** Runtime inventory, route demonstration, primary-source support assessment, and explicit PHP-or-Go decision. No untested architecture is claimed supported. The [P1-002 runbook](../testing/p1-002-runbook.md) and [dated evidence report](../testing/p1-002-evidence-2026-10-27.md) track this work.
+
+## P1-002A — Research a documented identity-preserving package request mechanism
+
+**Objective:** Determine whether DSM 7.4 documents a request mechanism through which a standalone package can receive verified DSM session identity, without Web Station, a privileged helper, a browser companion, or a global DSM/nginx change.
+
+**Dependencies:** P1-002.
+
+**Work:** Research current primary Synology developer material for standalone package request entry points, authentication hand-off, package web integrations, and any explicitly supported package-to-DSM authorization interface. For each candidate, distinguish a published contract from an observed legacy implementation or hypothesis. Test only candidates whose documentation permits a third-party standalone package on the disposable target. Do not treat a package-owned static nginx route, manually reconstructed CGI environment, forwarded cookie, or child invocation of `authenticate.cgi` as a documented hand-off unless Synology documents that exact topology.
+
+**Acceptance criteria:**
+
+- [ ] Record the research date, DSM build, consulted primary sources, and Context7 availability/result; state any documentation gap.
+- [ ] Identify each candidate mechanism's required installed components, package privilege/account model, identity source, session-expiry/logout behavior, and support scope for third-party standalone packages.
+- [ ] Demonstrate one documented candidate end to end: an authenticated DSM request reaches the package, the package derives identity from DSM rather than client-supplied data, and unauthenticated, expired, logged-out, and forged requests are rejected.
+- [ ] Show that the candidate needs neither Web Station nor another installed runtime, root broker, setuid helper, broad share grant, browser companion, or global DSM/nginx modification.
+- [ ] If no candidate meets every condition, publish a version-scoped **unavailable** conclusion with the rejected candidates and evidence. This completes the research ticket but blocks P1-003–P1-006 and Phase 2; it does not authorize an undocumented workaround.
+
+**Required evidence:** Dated source inventory and candidate comparison; sanitized request matrix for any viable candidate; or a negative-result report that names the documented limitation and tested DSM version. Update the P1-002 evidence report with the resulting runtime decision and keep P1-003 blocked until this ticket passes.
 
 ## P1-003 — Prove authenticated package routing
 
 **Objective:** Derive the requesting DSM identity from a verified request environment and reject forged or expired requests.
 
-**Dependencies:** P1-002.
+**Dependencies:** P1-002A.
 
 **Work:** Exercise the selected package route with authenticated POST requests, application access policy, CSRF protection, origin checks, and bounded input. Validate the route through direct HTTPS and the intended reverse proxy configuration.
 
@@ -156,7 +175,7 @@ For API, runtime, or tooling documentation, consult Context7 first. If authorita
 
 **Objective:** Make the Phase 1 result reviewable and decide each subsequent phase independently.
 
-**Dependencies:** Results from P1-001–P1-007, including negative findings or explicit blocked/unperformed checks. Do not require every investigation to succeed before documenting the outcome.
+**Dependencies:** Results from P1-001–P1-007 and P1-002A, including negative findings or explicit blocked/unperformed checks. Do not require every investigation to succeed before documenting the outcome.
 
 **Work:** Consolidate the inventory, runtime decision, one-file demonstration, security/containment results, and compatibility report. Map evidence to the Phase 1 acceptance checklist and record separate readiness decisions.
 
@@ -175,7 +194,7 @@ For API, runtime, or tooling documentation, consult Context7 first. If authorita
 
 | Roadmap acceptance check | Primary tickets |
 | --- | --- |
-| Authenticate the DSM user; reject expired or forged requests | P1-002, P1-003 |
+| Authenticate the DSM user; reject expired or forged requests | P1-002, P1-002A, P1-003 |
 | Analyze allowed files without disclosing denied-file metadata | P1-004, P1-005 |
 | Run MediaInfo without shells/elevation; bound and safely return output | P1-005, P1-006 |
 | Private temporary data and cleanup on every lifecycle path | P1-006 |
