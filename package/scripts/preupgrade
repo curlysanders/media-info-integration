@@ -1,0 +1,5 @@
+#!/bin/sh
+set -eu
+
+# DSM requires this lifecycle hook for an in-place package upgrade.
+exit 0

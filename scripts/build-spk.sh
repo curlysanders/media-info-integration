@@ -23,7 +23,9 @@ cp "$ROOT/package/conf/privilege" "$STAGE/conf/privilege"
 cp "$ROOT/package/conf/resource" "$STAGE/conf/resource"
 cp -R "$ROOT/package/nginx/." "$STAGE/package/nginx/"
 cp "$ROOT/package/scripts/start-stop-status" "$STAGE/scripts/start-stop-status"
-chmod 0755 "$STAGE/scripts/start-stop-status" "$STAGE/package/bin/runtime-probe"
+cp "$ROOT/package/scripts/preupgrade" "$STAGE/scripts/preupgrade"
+cp "$ROOT/package/scripts/postupgrade" "$STAGE/scripts/postupgrade"
+chmod 0755 "$STAGE/scripts/start-stop-status" "$STAGE/scripts/preupgrade" "$STAGE/scripts/postupgrade" "$STAGE/package/bin/runtime-probe"
 (cd "$STAGE/package" && tar -czf ../package.tgz bin nginx)
 printf 'checksum="%s"\n' "$(md5sum "$STAGE/package.tgz" | awk '{print $1}')" >> "$STAGE/INFO"
 (cd "$STAGE" && tar -cf "$OUTPUT/mediainfo-poc-$VERSION-$ARCH.spk" INFO PACKAGE_ICON.PNG PACKAGE_ICON_256.PNG conf scripts package.tgz)

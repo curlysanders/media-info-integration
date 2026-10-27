@@ -1,5 +1,5 @@
 package="mediainfo-poc"
-version="0.1.0-0007"
+version="0.1.0-0008"
 displayname="MediaInfo Runtime Proof"
 description="Disposable Phase 1 runtime probe for MediaInfo package routing."
 maintainer="MediaInfo project"
