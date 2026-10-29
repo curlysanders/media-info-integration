@@ -1,6 +1,6 @@
 # Phase 1 tickets — Proof of concept
 
-These tickets implement the [Phase 1 roadmap](01-proof-of-concept.md). P1-001 is complete on the disposable `DSM-7.4-Test` VM. P1-002 is **Blocked** pending the planned P1-002A research gate; the remaining tickets are **Planned**. Results are scoped to that Arc Loader VM, not physical Synology hardware. DSM 7.4 is the target. DSM 7.3 compatibility and the usable standalone product belong to later work.
+These tickets implement the [Phase 1 roadmap](01-proof-of-concept.md). P1-001, P1-002, P1-002A, and P1-003 are complete on the disposable `DSM-7.4-Test` VM; P1-004–P1-008 remain planned. Results are scoped to that Arc Loader VM, not physical Synology hardware. DSM 7.4 is the target. DSM 7.3 compatibility and the usable standalone product belong to later work.
 
 ## Execution and evidence
 
@@ -72,7 +72,7 @@ For API, runtime, or tooling documentation, consult Context7 first. If authorita
 - [x] Identify each candidate mechanism's required installed components, package privilege/account model, identity source, session-expiry/logout behavior, and support scope for third-party standalone packages.
 - [x] Demonstrate one documented candidate end to end: an authenticated DSM request reaches the package, the package derives identity from DSM rather than client-supplied data, and unauthenticated, expired, logged-out, and forged requests are rejected.
 - [x] Show that the candidate needs neither Web Station nor another installed runtime, root broker, setuid helper, broad share grant, browser companion, or global DSM/nginx modification.
-- [ ] If no candidate meets every condition, publish a version-scoped **unavailable** conclusion with the rejected candidates and evidence. This completes the research ticket but blocks P1-003–P1-006 and Phase 2; it does not authorize an undocumented workaround.
+- Conditional negative-result path — **not applicable**: the version-scoped `dsmuidir` package custom-CGI candidate met every condition on DSM `7.4.1-90080 Update 1` / `v1000`; see the [dated viable-mechanism evidence](../testing/p1-002a-evidence-2026-10-27.md). If no future candidate meets every condition, publish a version-scoped **unavailable** conclusion with the rejected candidates and evidence. That conclusion completes the research ticket but blocks P1-003–P1-006 and Phase 2; it does not authorize an undocumented workaround.
 
 **Required evidence:** Dated source inventory and candidate comparison; sanitized request matrix for any viable candidate; or a negative-result report that names the documented limitation and tested DSM version. The [P1-002A runbook](../testing/p1-002a-runbook.md) and [dated evidence report](../testing/p1-002a-evidence-2026-10-27.md) track this work. Update the P1-002 evidence report with the resulting runtime decision and keep P1-003 blocked until this ticket passes.
 
