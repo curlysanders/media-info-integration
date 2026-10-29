@@ -1,0 +1,8 @@
+{
+  "allowedUsers": [
+    "test1"
+  ],
+  "allowedOrigins": [
+    "https://localhost:5001"
+  ]
+}
