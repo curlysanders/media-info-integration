@@ -1,6 +1,6 @@
 # P1-002 — package request runtime proof
 
-This runbook records the original `mediainfo-poc` P1-002 disposable FastCGI prototype on `DSM-7.4-Test`. It selected a dependency-free static `linux/amd64` Go fallback for the `v1000` VM, exposed through DSM's documented Web Config resource. That route is rejected for authenticated use because it could not preserve DSM session identity. The successor package-custom-CGI candidate is documented in the [P1-002A runbook](p1-002a-runbook.md); it is a separate live validation gate and does not yet change the P1-002 outcome.
+This runbook records the original `mediainfo-poc` P1-002 disposable FastCGI prototype on `DSM-7.4-Test`. It selected a dependency-free static `linux/amd64` Go fallback for the `v1000` VM, exposed through DSM's documented Web Config resource. That route is rejected for authenticated use because it could not preserve DSM session identity. The successor package-custom-CGI route was validated separately by P1-002A and is now the selected P1-002 runtime route for DSM `7.4.1-90080 Update 1` / `v1000`; see the [dated P1-002A evidence](p1-002a-evidence-2026-10-27.md).
 
 The initial PHP investigation is mandatory. A bundled Go fallback is selected only when the observations show that PHP does not provide a documented, package-owned request SAPI under the package account. An installed CLI binary, DSM's own PHP pool, or PHP's development server does not pass this gate.
 
