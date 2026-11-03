@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MediaInfo experimental integration</title>
+  <style>
+    :root { color-scheme: light; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    body { background: #f6f7f9; color: #263238; margin: 0; padding: 24px; }
+    main { background: #fff; border: 1px solid #d9dee5; border-radius: 6px; box-shadow: 0 3px 12px rgb(0 0 0 / 12%); margin: 0 auto; max-width: 680px; padding: 24px; }
+    h1 { font-size: 20px; font-weight: 600; margin: 0 0 18px; }
+    dl { margin: 0; }
+    dt { color: #667085; font-size: 12px; font-weight: 600; margin-top: 14px; text-transform: uppercase; }
+    dd { margin: 4px 0 0; overflow-wrap: anywhere; }
+    .status { background: #fff7e6; border: 1px solid #f3d19e; border-radius: 4px; margin-top: 22px; padding: 12px; }
+    button { background: #2e7dbe; border: 0; border-radius: 4px; color: #fff; cursor: pointer; margin-top: 22px; padding: 8px 14px; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>MediaInfo experimental integration</h1>
+    <p id="empty">Waiting for a File Station selection.</p>
+    <dl id="selection" hidden>
+      <dt>Selected file</dt><dd id="name"></dd>
+      <dt>File Station reference</dt><dd id="path"></dd>
+    </dl>
+    <p class="status">This compatibility probe does not analyze the file yet. The selected reference is display-only until the server-side File Station relay has passed its authorization and large-media tests.</p>
+    <button type="button" onclick="window.close()">Close</button>
+  </main>
+  <script>
+    if (window.opener) {
+      window.opener.postMessage({ type: "mediainfo-poc-ready" }, window.location.origin);
+    }
+    window.addEventListener("message", function (event) {
+      if (event.origin !== window.location.origin || !event.data || event.data.type !== "mediainfo-poc-selection") return;
+      document.getElementById("empty").hidden = true;
+      document.getElementById("selection").hidden = false;
+      document.getElementById("name").textContent = event.data.selection.name;
+      document.getElementById("path").textContent = event.data.selection.path;
+    });
+  </script>
+</body>
+</html>

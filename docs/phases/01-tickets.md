@@ -19,7 +19,7 @@ For API, runtime, or tooling documentation, consult Context7 first. If authorita
 | [P1-004](#p1-004--prove-user-authorization-for-the-exact-opened-file) | Effective user authorization and safe file access | P1-003 | Complete — unavailable documented original-file handoff on DSM 7.4.1/v1000 |
 | [P1-005](#p1-005--demonstrate-controlled-one-file-mediainfo-analysis) | Reproducible one-file JSON demonstration | P1-004 | Blocked — P1-004 authorization unavailable |
 | [P1-006](#p1-006--validate-containment-resource-limits-and-cleanup) | Measured limits, cancellation, and cleanup | P1-005 | Blocked — P1-005 cannot begin |
-| [P1-007](#p1-007--investigate-file-station-compatibility) | Independent, version-scoped compatibility result | P1-001 | Planned |
+| [P1-007](#p1-007--investigate-file-station-compatibility) | Independent, version-scoped compatibility result | P1-001 | In progress — experimental package callback probe |
 | [P1-008](#p1-008--consolidate-evidence-and-record-readiness-decisions) | Separate Phase 2 and Phase 3 decisions | P1-001–P1-007 and P1-002A results | Planned |
 
 ## P1-001 — Establish the disposable test environment

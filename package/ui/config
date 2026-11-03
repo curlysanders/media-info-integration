@@ -1,0 +1,31 @@
+{
+  "MediaInfoPoc.js": {
+    "SYNO.MediaInfoPoc.Application": {
+      "version": "0.1.0-0020",
+      "type": "app",
+      "title": "MediaInfo experimental integration",
+      "allowStandalone": true,
+      "allowMultiInstance": true,
+      "allUsers": true,
+      "grantPrivilege": "all",
+      "advanceGrantPrivilege": true,
+      "depend": [
+        "SYNO.MediaInfoPoc.FileStation"
+      ],
+      "fb_extern": [
+        {
+          "multiple": false,
+          "launchFn": "SYNO.MediaInfoPoc.FileStation.launch",
+          "checkFn": "SYNO.MediaInfoPoc.FileStation.isEligible",
+          "dir": false,
+          "text": "View MediaInfo (experimental)",
+          "dbclick": false,
+          "vfs": true
+        }
+      ]
+    },
+    "SYNO.MediaInfoPoc.FileStation": [],
+    "SYNO.MediaInfoPoc.FileStation.launch": [],
+    "SYNO.MediaInfoPoc.FileStation.isEligible": []
+  }
+}

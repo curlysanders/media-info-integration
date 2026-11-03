@@ -30,6 +30,7 @@ cp "$ROOT/package/conf/resource" "$STAGE/conf/resource"
 cp "$ROOT/package/scripts/start-stop-status" "$STAGE/scripts/start-stop-status"
 cp "$ROOT/package/scripts/preupgrade" "$STAGE/scripts/preupgrade"
 cp "$ROOT/package/scripts/postupgrade" "$STAGE/scripts/postupgrade"
+cp -R "$ROOT/package/ui/." "$STAGE/package/ui/"
 cp "$POLICY" "$STAGE/package/ui/routing-policy.json"
 chmod 0755 "$STAGE/scripts/start-stop-status" "$STAGE/scripts/preupgrade" "$STAGE/scripts/postupgrade" "$STAGE/package/ui/runtime.cgi"
 (cd "$STAGE/package" && tar -czf ../package.tgz ui)
