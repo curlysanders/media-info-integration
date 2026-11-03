@@ -1,6 +1,6 @@
 # MediaInfo for Synology DSM
 
-An open-source DSM 7.4 package is planned, not implemented. Phase 2 delivers a secure standalone MediaInfo viewer with a package-owned DSM window. Phase 3 may add an experimental File Station **View MediaInfo** action if DSM 7.4 accepts the observed legacy compatibility mechanism.
+This proof-of-concept is concluded; no DSM package will be developed further. The desired File Station **View MediaInfo** action is unavailable on the tested DSM 7.4/File Station target, while a standalone viewer is explicitly not the intended product experience. See the [final decision](docs/final-decision-2026-11-03.md).
 
 | Document | Purpose |
 | --- | --- |
