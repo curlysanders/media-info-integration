@@ -1,8 +1,12 @@
 (function (global) {
     "use strict";
 
-    var namespace = global.SYNO = global.SYNO || {};
-    namespace.MediaInfoPoc = namespace.MediaInfoPoc || {};
+    if (!global.SYNO || !global.Vue) {
+        return;
+    }
+
+    global.SYNO.namespace("SYNO.SDS.MediaInfoPoc");
+    var namespace = global.SYNO.SDS.MediaInfoPoc;
 
     var supportedExtensions = {
         "m4v": true,
@@ -60,7 +64,7 @@
         return { name: name, path: path };
     }
 
-    namespace.MediaInfoPoc.FileStation = {
+    namespace.FileStation = {
         isEligible: function (records) {
             return selection(records) !== null;
         },
@@ -71,30 +75,20 @@
                 return false;
             }
 
-            var popup = global.open(
-                "/webman/3rdparty/mediainfo-poc/index.html",
-                "mediainfo-poc",
-                "width=760,height=520"
-            );
-            if (!popup) {
-                return false;
-            }
-
-            var sendSelection = function (event) {
-                if (event.source !== popup || event.origin !== global.location.origin || !event.data || event.data.type !== "mediainfo-poc-ready") {
-                    return;
-                }
-                popup.postMessage({
-                    type: "mediainfo-poc-selection",
-                    selection: selected
-                }, global.location.origin);
-                global.removeEventListener("message", sendSelection);
-            };
-            global.addEventListener("message", sendSelection);
-            global.setTimeout(function () {
-                global.removeEventListener("message", sendSelection);
-            }, 5000);
+            global.SYNO.SDS.AppLaunch("SYNO.SDS.MediaInfoPoc.Application", {
+                fb_recs: records
+            });
             return true;
         }
     };
+
+    namespace.Application = global.Vue.extend({
+        template: [
+            '<v-app-instance class-name="SYNO.SDS.MediaInfoPoc.Application">',
+            '<v-app-window syno-id="SYNO.SDS.MediaInfoPoc.Window" ref="appWindow" width="760" height="520" :resizable="true">',
+            '<iframe src="/webman/3rdparty/mediainfo-poc/index.html" title="MediaInfo experimental integration" style="border:0;height:100%;width:100%"></iframe>',
+            '</v-app-window>',
+            '</v-app-instance>'
+        ].join('')
+    });
 }(window));

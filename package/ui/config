@@ -1,22 +1,25 @@
 {
   "MediaInfoPoc.js": {
-    "SYNO.MediaInfoPoc.Application": {
-      "version": "0.1.0-0022",
+    "SYNO.SDS.MediaInfoPoc.Application": {
+      "version": "0.1.0-0024",
       "type": "app",
       "title": "MediaInfo experimental integration",
+      "appWindow": "SYNO.SDS.MediaInfoPoc.Application",
+      "desc": "Disposable File Station compatibility probe.",
       "allowStandalone": true,
-      "allowMultiInstance": true,
+      "allowMultiInstance": false,
+      "allowSharing": true,
       "allUsers": true,
       "grantPrivilege": "all",
       "advanceGrantPrivilege": true,
       "depend": [
-        "SYNO.MediaInfoPoc.FileStation"
+        "SYNO.SDS.MediaInfoPoc.FileStation"
       ],
       "fb_extern": [
         {
           "multiple": false,
-          "launchFn": "SYNO.MediaInfoPoc.FileStation.launch",
-          "checkFn": "SYNO.MediaInfoPoc.FileStation.isEligible",
+          "launchFn": "SYNO.SDS.MediaInfoPoc.FileStation.launch",
+          "checkFn": "SYNO.SDS.MediaInfoPoc.FileStation.isEligible",
           "inMenu": "gc_view",
           "menuPriority": -1,
           "dir": false,
@@ -26,8 +29,8 @@
         }
       ]
     },
-    "SYNO.MediaInfoPoc.FileStation": [],
-    "SYNO.MediaInfoPoc.FileStation.launch": [],
-    "SYNO.MediaInfoPoc.FileStation.isEligible": []
+    "SYNO.SDS.MediaInfoPoc.FileStation": [],
+    "SYNO.SDS.MediaInfoPoc.FileStation.launch": [],
+    "SYNO.SDS.MediaInfoPoc.FileStation.isEligible": []
   }
 }

@@ -19,25 +19,9 @@
 <body>
   <main>
     <h1>MediaInfo experimental integration</h1>
-    <p id="empty">Waiting for a File Station selection.</p>
-    <dl id="selection" hidden>
-      <dt>Selected file</dt><dd id="name"></dd>
-      <dt>File Station reference</dt><dd id="path"></dd>
-    </dl>
-    <p class="status">This compatibility probe does not analyze the file yet. The selected reference is display-only until the server-side File Station relay has passed its authorization and large-media tests.</p>
+    <p>This window verifies that DSM launched a package-owned application from the File Station action.</p>
+    <p class="status">This compatibility probe does not receive, analyze, open, or persist the selected file. Any future handoff would need separate proof of authorization and large-media streaming behavior.</p>
     <button type="button" onclick="window.close()">Close</button>
   </main>
-  <script>
-    if (window.opener) {
-      window.opener.postMessage({ type: "mediainfo-poc-ready" }, window.location.origin);
-    }
-    window.addEventListener("message", function (event) {
-      if (event.origin !== window.location.origin || !event.data || event.data.type !== "mediainfo-poc-selection") return;
-      document.getElementById("empty").hidden = true;
-      document.getElementById("selection").hidden = false;
-      document.getElementById("name").textContent = event.data.selection.name;
-      document.getElementById("path").textContent = event.data.selection.path;
-    });
-  </script>
 </body>
 </html>
