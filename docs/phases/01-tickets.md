@@ -16,9 +16,9 @@ For API, runtime, or tooling documentation, consult Context7 first. If authorita
 | [P1-002](#p1-002--select-and-prove-the-package-request-runtime) | PHP assessment and runtime decision | P1-001 | Complete — static Go custom CGI selected for `v1000` |
 | [P1-002A](#p1-002a--research-a-documented-identity-preserving-package-request-mechanism) | Documented standalone-package identity hand-off decision | P1-002 | Complete — version-scoped DSM 7.4 evidence recorded |
 | [P1-003](#p1-003--prove-authenticated-package-routing) | Authenticated and protected request route | P1-002A | Complete — DSM 7.4.1/v1000 direct and reverse-proxy matrix recorded |
-| [P1-004](#p1-004--prove-user-authorization-for-the-exact-opened-file) | Effective user authorization and safe file access | P1-003 | Planned |
-| [P1-005](#p1-005--demonstrate-controlled-one-file-mediainfo-analysis) | Reproducible one-file JSON demonstration | P1-004 | Planned |
-| [P1-006](#p1-006--validate-containment-resource-limits-and-cleanup) | Measured limits, cancellation, and cleanup | P1-005 | Planned |
+| [P1-004](#p1-004--prove-user-authorization-for-the-exact-opened-file) | Effective user authorization and safe file access | P1-003 | Complete — unavailable documented original-file handoff on DSM 7.4.1/v1000 |
+| [P1-005](#p1-005--demonstrate-controlled-one-file-mediainfo-analysis) | Reproducible one-file JSON demonstration | P1-004 | Blocked — P1-004 authorization unavailable |
+| [P1-006](#p1-006--validate-containment-resource-limits-and-cleanup) | Measured limits, cancellation, and cleanup | P1-005 | Blocked — P1-005 cannot begin |
 | [P1-007](#p1-007--investigate-file-station-compatibility) | Independent, version-scoped compatibility result | P1-001 | Planned |
 | [P1-008](#p1-008--consolidate-evidence-and-record-readiness-decisions) | Separate Phase 2 and Phase 3 decisions | P1-001–P1-007 and P1-002A results | Planned |
 
@@ -112,7 +112,7 @@ For API, runtime, or tooling documentation, consult Context7 first. If authorita
 - [ ] Prove access to the original authorized file. If a complete private copy is used diagnostically, label it diagnostic-only and measure size, additional space, I/O, and latency on the prepared fixtures; do not count it as the Phase 2 direct-access gate passing.
 - [ ] Record a blocked Phase 2 gate if effective user authorization cannot be preserved; do not substitute the daemon's access as proof.
 
-**Required evidence:** Access-design explanation, allow/deny matrix, race-test procedure/results, and any diagnostic-copy measurements. A negative finding must remain explicit rather than being marked as successful authorization.
+**Required evidence:** Access-design explanation, allow/deny matrix, race-test procedure/results, and any diagnostic-copy measurements. A negative finding must remain explicit rather than being marked as successful authorization. The [P1-004 runbook](../testing/p1-004-runbook.md), [evidence template](../testing/p1-004-evidence-template.md), and [dated unavailable result](../testing/p1-004-evidence-2026-11-03.md) define and record the strict decision gate; no diagnostic-copy fallback is planned.
 
 ## P1-005 — Demonstrate controlled one-file MediaInfo analysis
 
