@@ -4,11 +4,11 @@ This roadmap turns the feasibility work into a package in three stages. The targ
 
 | Phase | Outcome | Status |
 | --- | --- | --- |
-| [1. Proof of concept](01-proof-of-concept.md) | Evidence for a documented identity-preserving package request mechanism, safe runtime, per-user file authorization, MediaInfo analysis, and the `fb_extern` compatibility route | In progress (P1-004–P1-008; P1-001, P1-002, P1-002A, and P1-003 complete) |
-| [2. Standalone package](02-standalone-package.md) | A usable open-source SPK with its own DSM window and file selection | Planned |
-| [3. File Station integration](03-file-station-integration.md) | Optional experimental “View MediaInfo” menu action, if Phase 1 validates it | Conditional |
+| [1. Proof of concept](01-proof-of-concept.md) | Evidence for a documented identity-preserving package request mechanism, safe runtime, per-user file authorization, MediaInfo analysis, and the `fb_extern` compatibility route | Concluded — P1-004 and P1-007 are unavailable on DSM 7.4.1/v1000; the product is not proceeding |
+| [2. Standalone package](02-standalone-package.md) | A usable open-source SPK with its own DSM window and file selection | Not pursued — it is not the intended user experience |
+| [3. File Station integration](03-file-station-integration.md) | Optional experimental “View MediaInfo” menu action, if Phase 1 validates it | Not pursued — the tested File Station route is unavailable |
 
-Phase 2 does not depend on Phase 3. A Properties-window tab is outside this roadmap because no supported or observed extension point has been found.
+No subsequent phase will be implemented. A Properties-window tab is outside this roadmap because no supported or observed extension point has been found.
 
 The [Phase 1 ticket backlog](01-tickets.md) breaks the proof of concept into ordered investigations with acceptance criteria and required evidence.
 
