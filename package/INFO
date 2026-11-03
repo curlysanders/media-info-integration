@@ -1,5 +1,5 @@
 package="mediainfo-poc"
-version="0.1.0-0020"
+version="0.1.0-0022"
 displayname="MediaInfo experimental integration"
 description="Disposable Phase 1 MediaInfo and File Station compatibility probes."
 maintainer="MediaInfo project"

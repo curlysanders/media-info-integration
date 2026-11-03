@@ -1,7 +1,7 @@
 {
   "MediaInfoPoc.js": {
     "SYNO.MediaInfoPoc.Application": {
-      "version": "0.1.0-0020",
+      "version": "0.1.0-0022",
       "type": "app",
       "title": "MediaInfo experimental integration",
       "allowStandalone": true,
@@ -17,6 +17,8 @@
           "multiple": false,
           "launchFn": "SYNO.MediaInfoPoc.FileStation.launch",
           "checkFn": "SYNO.MediaInfoPoc.FileStation.isEligible",
+          "inMenu": "gc_view",
+          "menuPriority": -1,
           "dir": false,
           "text": "View MediaInfo (experimental)",
           "dbclick": false,

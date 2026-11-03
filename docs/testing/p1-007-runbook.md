@@ -2,7 +2,7 @@
 
 This runbook tests the package-owned, undocumented File Station integration candidate on the disposable DSM target only. It is an **observed compatibility experiment**, not a supported Synology extension contract and not an authorization mechanism.
 
-The `0.1.0-0020` probe contributes a minimal `fb_extern` declaration and callback bundle. It accepts exactly one regular file whose extension is one of `m4v`, `mkv`, `mov`, `mp4`, `mpeg`, `mpg`, or `webm`. On activation it opens a package-owned window and displays the File Station record as a client-side diagnostic. It does not submit the record to the CGI, open a file, invoke MediaInfo, relay a session, or persist any selection.
+The `0.1.0-0022` probe contributes a minimal `fb_extern` declaration and callback bundle. It accepts exactly one regular file whose extension is one of `m4v`, `mkv`, `mov`, `mp4`, `mpeg`, `mpg`, or `webm`. It recognizes an array, Ext collection, `{records}`, `{recs}`, or a single record callback shape. On activation it opens a package-owned window and displays the File Station record as a client-side diagnostic. It does not submit the record to the CGI, open a file, invoke MediaInfo, relay a session, or persist any selection.
 
 ## Preconditions
 

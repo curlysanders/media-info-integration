@@ -21,6 +21,15 @@
         if (records && typeof records.getCount === "function" && typeof records.getAt === "function") {
             return records.getCount() === 1 ? records.getAt(0) : null;
         }
+        if (records && Array.isArray(records.records)) {
+            return records.records.length === 1 ? records.records[0] : null;
+        }
+        if (records && Array.isArray(records.recs)) {
+            return records.recs.length === 1 ? records.recs[0] : null;
+        }
+        if (records && typeof records === "object") {
+            return records;
+        }
         return null;
     }
 
